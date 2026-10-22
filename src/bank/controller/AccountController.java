@@ -1,20 +1,25 @@
 package bank.controller;
 
+import bank.dao.AccountDAO;
+import bank.dao.TransactionDAO;
 import bank.model.Account;
 import bank.model.Customer;
 import bank.model.Transaction;
 import bank.model.Withdrawable;
 import bank.view.AccountView;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-/** Controller: connects AccountView (boundary) to the model classes. */
+/** Controller: connects AccountView (boundary) to the model classes and the database. */
 public class AccountController {
 
     private final Customer customer;
     private final AccountView view;
+    private final AccountDAO accountDao = new AccountDAO();
+    private final TransactionDAO transactionDao = new TransactionDAO();
 
     public AccountController(Customer customer, AccountView view) {
         this.customer = customer;
@@ -77,13 +82,26 @@ public class AccountController {
             view.showMessage("Select an account first.", true);
             return;
         }
+        int transactionsBefore = account.getTransactions().size();
         try {
             action.accept(account);
+            saveToDatabase(account, transactionsBefore);
             view.clearAmount();
             refresh();
             view.showMessage(successMessage, false);
         } catch (RuntimeException e) {
             view.showMessage(e.getMessage(), true);
+        } catch (SQLException e) {
+            view.showMessage("Could not save to the database: " + e.getMessage(), true);
         }
+    }
+
+    /** Saves the new balance and the new transaction(s) of the account. */
+    private void saveToDatabase(Account account, int transactionsBefore) throws SQLException {
+        List<Transaction> all = account.getTransactions();
+        for (int i = transactionsBefore; i < all.size(); i++) {
+            transactionDao.insert(account.getAccountNumber(), all.get(i));
+        }
+        accountDao.updateBalance(account.getAccountNumber(), account.getBalance());
     }
 }
