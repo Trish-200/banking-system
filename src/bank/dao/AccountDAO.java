@@ -71,6 +71,19 @@ public class AccountDAO {
         return result;
     }
 
+    /** Makes new accounts continue after the highest account number already saved. */
+    public void syncAccountCounter() throws SQLException {
+        String sql = "SELECT MAX(account_number) FROM accounts";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet row = statement.executeQuery()) {
+            if (row.next() && row.getString(1) != null) {
+                Customer helper = new Customer("Sync", "Sync", "Sync");
+                new SavingsAccount(helper, "Sync").restore(row.getString(1), 0);
+            }
+        }
+    }
+
     /** UPDATE: saves a new balance for an account. */
     public boolean updateBalance(String accountNumber, double newBalance) throws SQLException {
         String sql = "UPDATE accounts SET balance = ? WHERE account_number = ?";

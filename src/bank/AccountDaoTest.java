@@ -16,6 +16,9 @@ public class AccountDaoTest {
         AccountDAO accountDao = new AccountDAO();
         TransactionDAO transactionDao = new TransactionDAO();
         try {
+            // makes new account numbers continue after the ones already saved
+            accountDao.syncAccountCounter();
+
             // 1. Save a customer with all three account types
             Customer customer = new Customer("Neo", "Kgosi", "Plot 12, Gaborone");
             int id = customerDao.insert(customer);
