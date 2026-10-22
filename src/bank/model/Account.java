@@ -11,7 +11,7 @@ import java.util.List;
 public abstract class Account {
     private static int counter = 0;
 
-    protected final String accountNumber;
+    protected  String accountNumber;
     protected double balance;
     protected final String branch;
     private final Customer customer;
@@ -64,7 +64,21 @@ public abstract class Account {
         balance = round(balance + interest);
         transactions.add(new Transaction("Interest", interest, balance));
     }
+    /** Used by the DAO only: puts back the saved details when loading from the database. */
+    public void restore(String savedAccountNumber, double savedBalance) {
+        this.accountNumber = savedAccountNumber;
+        this.balance = savedBalance;
+        this.transactions.clear();
+        int number = Integer.parseInt(savedAccountNumber.substring(3));
+        if (number > counter) {
+            counter = number;
+        }
+    }
 
+    /** Used by the DAO only: puts back one saved transaction. */
+    public void addRestoredTransaction(Transaction transaction) {
+        transactions.add(transaction);
+    }
     /** Abstraction: each account type decides how its interest is paid. */
     public abstract void payInterest();
 

@@ -20,6 +20,14 @@ public class Transaction {
         this.balanceAfter = balanceAfter;
     }
 
+    /** Used by the DAO only: rebuilds a saved transaction with its original date and time. */
+    public Transaction(LocalDateTime dateTime, String type, double amount, double balanceAfter) {
+        this.dateTime = dateTime;
+        this.type = type;
+        this.amount = amount;
+        this.balanceAfter = balanceAfter;
+    }
+
     public LocalDateTime getDateTime() { return dateTime; }
     public String getType() { return type; }
     public double getAmount() { return amount; }
