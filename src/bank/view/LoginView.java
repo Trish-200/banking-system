@@ -20,7 +20,7 @@ public class LoginView {
     public LoginView() {
         Label title = new Label("Banking System");
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
-        Label subtitle = new Label("Staff Login");
+        Label subtitle = new Label("Customer Login");
 
         usernameField.setPromptText("Username");
         passwordField.setPromptText("Password");

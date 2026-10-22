@@ -46,6 +46,7 @@ public class BankApp extends Application {
         stage.setTitle("Banking System");
         stage.setScene(new Scene(loginView.getRoot(), 380, 360));
         stage.show();
+        loginView.getRoot().requestFocus();
     }
 
     /** Loads the customer and their accounts from the database and shows the account screen. */
