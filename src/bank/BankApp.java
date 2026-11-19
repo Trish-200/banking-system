@@ -8,7 +8,12 @@ import bank.model.Customer;
 import bank.view.AccountView;
 import bank.view.LoginView;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -34,7 +39,7 @@ public class BankApp extends Application {
                 if (result == null) {
                     loginView.showError("Wrong username or password.");
                 } else if (result.customerId() == null) {
-                    loginView.showError("This is a staff login. Please use a customer login.");
+                    showStaffScreen(stage, result);
                 } else {
                     showAccountScreen(stage, result.customerId());
                 }
@@ -47,6 +52,39 @@ public class BankApp extends Application {
         stage.setScene(new Scene(loginView.getRoot(), 380, 360));
         stage.show();
         loginView.getRoot().requestFocus();
+    }
+
+    /** Staff (teller or administrator) choose which customer to serve. */
+    private void showStaffScreen(Stage stage, UserDAO.LoginResult staff) throws SQLException {
+        Label title = new Label("Welcome, " + staff.fullName() + " (" + staff.role() + ")");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        Label prompt = new Label("Choose a customer to serve:");
+
+        ComboBox<String> customers = new ComboBox<>();
+        customers.getItems().addAll(customerDao.findAll());
+        customers.setMaxWidth(Double.MAX_VALUE);
+
+        Button open = new Button("Open customer accounts");
+        Label message = new Label();
+        message.setStyle("-fx-text-fill: #c0392b;");
+
+        open.setOnAction(e -> {
+            String chosen = customers.getValue();
+            if (chosen == null) {
+                message.setText("Select a customer first.");
+                return;
+            }
+            try {
+                showAccountScreen(stage, Integer.parseInt(chosen.split(" ")[0]));
+            } catch (SQLException ex) {
+                message.setText("Database problem: " + ex.getMessage());
+            }
+        });
+
+        VBox root = new VBox(12, title, prompt, customers, open, message);
+        root.setPadding(new Insets(24));
+        stage.setTitle("Banking System - Staff");
+        stage.setScene(new Scene(root, 460, 300));
     }
 
     /** Loads the customer and their accounts from the database and shows the account screen. */
