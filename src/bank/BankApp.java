@@ -50,6 +50,7 @@ public class BankApp extends Application {
 
         stage.setTitle("Banking System");
         stage.setScene(new Scene(loginView.getRoot(), 380, 360));
+        stage.getScene().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         stage.show();
         loginView.getRoot().requestFocus();
     }
@@ -85,6 +86,7 @@ public class BankApp extends Application {
         root.setPadding(new Insets(24));
         stage.setTitle("Banking System - Staff");
         stage.setScene(new Scene(root, 460, 300));
+        stage.getScene().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
     }
 
     /** Loads the customer and their accounts from the database and shows the account screen. */
@@ -96,5 +98,6 @@ public class BankApp extends Application {
         new AccountController(customer, accountView);
         stage.setTitle("Banking System - " + customer.getFullName());
         stage.setScene(new Scene(accountView.getRoot(), 460, 560));
+        stage.getScene().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
     }
 }
