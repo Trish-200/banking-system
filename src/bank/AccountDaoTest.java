@@ -10,6 +10,11 @@ import bank.model.InvestmentAccount;
 import bank.model.SavingsAccount;
 import bank.model.Transaction;
 
+/**
+ * Test for AccountDAO: saves a customer with three accounts, loads them back,
+ * updates a balance, then deletes everything it created.
+ */
+
 public class AccountDaoTest {
     public static void main(String[] args) {
         CustomerDAO customerDao = new CustomerDAO();

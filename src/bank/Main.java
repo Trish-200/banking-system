@@ -3,6 +3,7 @@ package bank;
 import bank.model.*;
 
 /**
+ * Simple starting class used for early testing of the program.
  * Console test of the core model (no GUI or database yet).
  * Run it to check that every rule from the assignment works.
  */

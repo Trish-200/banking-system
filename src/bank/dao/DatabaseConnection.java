@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/** Opens connections to the banking_system database (XAMPP MySQL). */
+/** Opens the JDBC connections to the MySQL database banking_system database (XAMPP). */
 public class DatabaseConnection {
 
     private static final String URL =

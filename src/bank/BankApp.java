@@ -18,6 +18,12 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
+/**
+ * Main JavaFX application. Shows the login screen, checks the username and password,
+ * then opens the staff screen (teller, manager, auditor, administrator) or the
+ * customer's account screen.
+ */
+
 public class BankApp extends Application {
 
     private final UserDAO userDao = new UserDAO();
